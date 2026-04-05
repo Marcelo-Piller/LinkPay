@@ -1,5 +1,5 @@
 # Ledgerpay
-
+.
 `Ledgerpay` e uma plataforma de transacoes de exemplo, desenhada para simular um pipeline de pagamentos no estilo bancario com lancamentos contabeis, padroes de resiliencia e observabilidade completa.
 
 ## Problema e Contexto
