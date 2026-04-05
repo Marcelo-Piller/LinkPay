@@ -194,5 +194,30 @@ services:
       otel-collector:
         condition: service_started
 
+  frontend:
+    build:
+      context: ..
+      dockerfile: services/frontend/Dockerfile
+    container_name: ledgerpay-frontend
+    environment:
+      PORT: 8080
+      PAYMENTS_API_URL: http://payments-api:8080
+      LEDGER_API_URL: http://ledger-api:8080
+      PAYMENTS_PUBLIC_URL: http://localhost:8081
+      LEDGER_PUBLIC_URL: http://localhost:8082
+      GRAFANA_URL: http://localhost:3000
+      RABBITMQ_URL: http://localhost:15672
+      JAEGER_URL: http://localhost:16686
+      JWT_ISSUER: ledgerpay.local
+      JWT_AUDIENCE: ledgerpay.api
+      JWT_SIGNING_KEY: ledgerpay-super-secret-signing-key-change-me
+    depends_on:
+      payments-api:
+        condition: service_started
+      ledger-api:
+        condition: service_started
+    ports:
+      - "8080:8080"
+
 volumes:
   postgres_data:

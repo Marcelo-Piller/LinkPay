@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 240" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">Logo da LinkPay</title>
+  <desc id="desc">Símbolo em formato infinito nas cores dourado e verde com seta ascendente.</desc>
+  <defs>
+    <linearGradient id="gold" x1="32" y1="168" x2="244" y2="72" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8E6B1F"/>
+      <stop offset="0.32" stop-color="#C59A34"/>
+      <stop offset="0.68" stop-color="#F0D271"/>
+      <stop offset="1" stop-color="#B88920"/>
+    </linearGradient>
+    <linearGradient id="green" x1="126" y1="196" x2="404" y2="32" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2D8F52"/>
+      <stop offset="0.48" stop-color="#149254"/>
+      <stop offset="1" stop-color="#0E6A45"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="18" width="420" height="204" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#0E5B47" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)" stroke-linecap="round" stroke-linejoin="round">
+    <path
+      d="M48 150C17 120 21 70 57 48C94 26 143 37 171 71C190 94 204 119 224 138"
+      stroke="url(#gold)"
+      stroke-width="28"/>
+    <path
+      d="M225 138C252 162 278 186 320 186C360 186 392 156 392 115C392 75 361 46 322 46C277 46 248 70 222 101C197 132 173 168 137 182C94 198 50 186 26 153"
+      stroke="url(#green)"
+      stroke-width="28"/>
+    <path
+      d="M48 150C76 183 120 193 159 171C191 153 212 121 234 94C255 68 281 46 322 46"
+      stroke="url(#gold)"
+      stroke-opacity="0.86"
+      stroke-width="28"/>
+  </g>
+  <path d="M393 115L366 89" stroke="#0F8250" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M393 115L355 116" stroke="#0F8250" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -16,6 +16,7 @@ Fluxo principal:
 
 ## Arquitetura
 
+- `frontend` (Golang Web UI + BFF): entrega a interface verde e branca, gera JWT localmente para o ambiente de desenvolvimento e orquestra chamadas para `payments-api` e `ledger-api`.
 - `payments-api` (.NET 8 Web API): cria/consulta/estorna intents de pagamento, idempotencia, outbox e estado da saga.
 - `risk-worker` (.NET 8 Worker): consome `payment.created.v1`, calcula score e publica aprovacao/reprovacao.
 - `ledger-api` (.NET 8 Web API + consumidor): faz lancamentos debito/credito e expoe conciliacao.
@@ -79,6 +80,7 @@ Stack incluido no Docker Compose:
 
 URLs uteis apos subir o ambiente:
 
+- Frontend Ledgerpay: `http://localhost:8080`
 - Swagger Payments: `http://localhost:8081/swagger`
 - Swagger Ledger: `http://localhost:8082/swagger`
 - RabbitMQ UI: `http://localhost:15672` (`guest/guest`)
@@ -122,6 +124,21 @@ Valores locais padrao (appsettings):
 
 Exemplo de payload do token: `docs/api-contracts/jwt-example.md`
 
+## Frontend Web
+
+O projeto agora inclui um frontend em `Go` que serve a UI e funciona como BFF para as APIs existentes.
+
+- Interface operacional unica para criar pagamentos, consultar status, pedir estorno, visualizar ledger e reconciliacao.
+- JWT gerado no servidor Go com os scopes `payments.write payments.read ledger.read`, evitando configuracao manual de token no ambiente local.
+- Variaveis de ambiente principais do frontend:
+  - `PAYMENTS_API_URL`
+  - `LEDGER_API_URL`
+  - `PAYMENTS_PUBLIC_URL`
+  - `LEDGER_PUBLIC_URL`
+  - `JWT_ISSUER`
+  - `JWT_AUDIENCE`
+  - `JWT_SIGNING_KEY`
+
 ## Demo de idempotencia (cURL)
 
 Use a mesma `Idempotency-Key` duas vezes:
@@ -159,6 +176,7 @@ Para rodar os testes:
 
 ```bash
 dotnet test Ledgerpay.sln
+cd services/frontend && go test ./...
 ```
 
 ## CI/CD
@@ -169,7 +187,8 @@ Pipeline do GitHub Actions em `.github/workflows/ci.yml`:
 2. validacao de formato (`dotnet format --verify-no-changes`)
 3. build
 4. test
-5. docker compose build
+5. test do frontend Go
+6. docker compose build
 
 ## Estrutura do repositorio
 
@@ -180,6 +199,7 @@ ledgerpay/
     diagrams/
     api-contracts/
   services/
+    frontend/
     payments/
     risk/
     ledger/

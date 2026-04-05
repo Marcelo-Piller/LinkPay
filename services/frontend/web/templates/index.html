@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LinkPay Banco Digital</title>
+    <meta name="description" content="Interface bancária da LinkPay para criar, acompanhar e estornar pagamentos com chave única.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+    <script defer src="/static/app.js"></script>
+</head>
+<body>
+    <div class="intro-splash" id="intro-splash" aria-hidden="true">
+        <div class="intro-splash__halo"></div>
+        <div class="intro-splash__content">
+            <img class="intro-splash__mark" src="/static/linkpay-mark.svg" alt="">
+            <div class="intro-splash__wordmark">
+                <div class="wordmark">
+                    <span class="wordmark-link">Link</span><span class="wordmark-pay">Pay</span>
+                </div>
+                <div class="wordmark-subtitle">BANCO DIGITAL</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-shell">
+        <header class="topbar">
+            <a class="brand" href="/">
+                <img class="brand-mark" src="/static/linkpay-mark.svg" alt="Logo LinkPay">
+                <span class="brand-copy">
+                    <span class="brand-wordmark">
+                        <span class="brand-link">Link</span><span class="brand-pay">Pay</span>
+                    </span>
+                    <small>Banco Digital</small>
+                </span>
+            </a>
+
+            <nav class="topnav">
+                <a href="#novo-pagamento">Pagar</a>
+                <a href="#acompanhar">Acompanhar</a>
+                <a href="#estorno">Estorno</a>
+            </nav>
+
+            <span class="trust-badge">Ambiente protegido</span>
+        </header>
+
+        <main class="content">
+            <section class="hero">
+                <div class="hero-copy">
+                    <span class="eyebrow">LinkPay Banco Digital</span>
+                    <h1>Pagamentos com visual bancario, simples e seguro.</h1>
+                    <p>
+                        Uma interface focada no usuario final para enviar pagamentos,
+                        acompanhar o andamento da transacao e solicitar estorno com mais clareza.
+                    </p>
+
+                    <div class="hero-actions">
+                        <a class="btn btn-primary" href="#novo-pagamento">Fazer pagamento</a>
+                        <a class="btn btn-secondary" href="#acompanhar">Consultar transacao</a>
+                    </div>
+                </div>
+
+                <aside class="hero-card">
+                    <span class="card-kicker">Padrao de mercado</span>
+                    <h2>Experiencia inspirada em bancos tradicionais</h2>
+                    <ul class="hero-list">
+                        <li>Branco predominante para leitura rapida.</li>
+                        <li>Verde institucional para acoes e status.</li>
+                        <li>Dourado em destaques e elementos de confianca.</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section class="feature-strip">
+                <article class="feature-card">
+                    <span class="feature-chip">Chave unica</span>
+                    <strong>Validacao antes do envio</strong>
+                    <p>A chave da operacao precisa seguir formato valido e nao pode ser reaproveitada na mesma sessao do navegador.</p>
+                </article>
+
+                <article class="feature-card">
+                    <span class="feature-chip">Acompanhamento</span>
+                    <strong>Status da transacao</strong>
+                    <p>Consulte o andamento do pagamento e veja se ele foi aprovado, postado ou estornado.</p>
+                </article>
+
+                <article class="feature-card">
+                    <span class="feature-chip">Comprovante</span>
+                    <strong>Retorno mais humano</strong>
+                    <p>O retorno da operacao aparece como comprovante amigavel, sem linguagem tecnica desnecessaria.</p>
+                </article>
+            </section>
+
+            <section class="workspace">
+                <article class="panel" id="novo-pagamento">
+                    <div class="panel-header">
+                        <div>
+                            <span class="panel-kicker">Novo pagamento</span>
+                            <h2>Preencha os dados da operacao</h2>
+                        </div>
+                    </div>
+
+                    <form class="form-grid" id="create-payment-form">
+                        <label>
+                            <span>Valor</span>
+                            <input id="amount" name="amount" type="number" min="0.01" step="0.01" placeholder="100.50" required>
+                        </label>
+
+                        <label>
+                            <span>Moeda</span>
+                            <input id="currency" name="currency" type="text" maxlength="3" value="BRL" required>
+                        </label>
+
+                        <label>
+                            <span>Identificacao do pagador</span>
+                            <input id="payer-id" name="payerId" type="text" value="customer-001" required>
+                        </label>
+
+                        <label>
+                            <span>Identificacao do recebedor</span>
+                            <input id="merchant-id" name="merchantId" type="text" value="merchant-abc" required>
+                        </label>
+
+                        <label class="field-span-2">
+                            <span>Chave unica da operacao</span>
+                            <div class="inline-field">
+                                <input id="idempotency-key" name="idempotencyKey" type="text" placeholder="ex.: pagamento_abril_001" required>
+                                <button class="btn btn-secondary btn-inline" id="generate-idem" type="button">Gerar nova</button>
+                            </div>
+                            <small class="helper-text">Use apenas letras, numeros, hifen ou underscore, com 8 a 64 caracteres.</small>
+                            <small class="field-feedback" id="key-feedback">A chave sera validada antes do envio.</small>
+                        </label>
+
+                        <button class="btn btn-primary" id="submit-payment" type="submit">Confirmar pagamento</button>
+                    </form>
+                </article>
+
+                <article class="panel" id="acompanhar">
+                    <div class="panel-header">
+                        <div>
+                            <span class="panel-kicker">Acompanhar</span>
+                            <h2>Consultar uma transacao</h2>
+                        </div>
+                    </div>
+
+                    <form class="lookup-form" id="lookup-payment-form">
+                        <input id="lookup-payment-id" name="paymentId" type="text" placeholder="Informe o codigo da transacao" required>
+                        <button class="btn btn-secondary" id="lookup-payment" type="submit">Consultar</button>
+                    </form>
+
+                    <div class="summary-card" id="payment-summary">
+                        <div class="summary-empty">
+                            <strong>Nenhuma transacao selecionada</strong>
+                            <p>Quando voce consultar ou criar um pagamento, o resumo aparecera aqui.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="panel panel-wide">
+                    <div class="panel-header">
+                        <div>
+                            <span class="panel-kicker">Comprovante</span>
+                            <h2>Ultima movimentacao</h2>
+                        </div>
+                    </div>
+
+                    <div class="receipt-card" id="receipt-card">
+                        <div class="receipt-empty">
+                            <strong>Aguardando sua primeira acao</strong>
+                            <p>Crie, consulte ou estorne um pagamento para visualizar o comprovante desta area.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="panel panel-wide">
+                    <div class="panel-header">
+                        <div>
+                            <span class="panel-kicker">Extrato da transacao</span>
+                            <h2>Movimentacoes vinculadas ao pagamento</h2>
+                        </div>
+                        <button class="btn btn-secondary" id="refresh-ledger" type="button">Atualizar extrato</button>
+                    </div>
+
+                    <div class="table-shell">
+                        <table class="ledger-table">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Descricao</th>
+                                    <th>Conta</th>
+                                    <th>Natureza</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ledger-rows">
+                                <tr>
+                                    <td colspan="5" class="table-empty">Nenhuma movimentacao disponivel para exibir.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+
+                <article class="panel" id="estorno">
+                    <div class="panel-header">
+                        <div>
+                            <span class="panel-kicker">Estorno</span>
+                            <h2>Solicitar reversao de pagamento</h2>
+                        </div>
+                    </div>
+
+                    <form class="form-grid" id="reverse-payment-form">
+                        <label class="field-span-2">
+                            <span>Codigo da transacao</span>
+                            <input id="reverse-payment-id" name="paymentId" type="text" placeholder="Use o codigo da transacao consultada" required>
+                        </label>
+
+                        <label class="field-span-2">
+                            <span>Motivo do estorno</span>
+                            <textarea id="reverse-reason" name="reason" rows="4" placeholder="Descreva o motivo do pedido" required></textarea>
+                        </label>
+
+                        <button class="btn btn-primary" id="submit-reversal" type="submit">Solicitar estorno</button>
+                    </form>
+                </article>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>LinkPay Banco Digital</span>
+            <span>&copy; {{.CurrentYear}} experiencia financeira com foco no usuario.</span>
+        </footer>
+    </div>
+</body>
+</html>

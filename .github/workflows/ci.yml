@@ -17,6 +17,11 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: services/frontend/go.mod
+
       - name: Restore
         run: dotnet restore Ledgerpay.sln
 
@@ -28,6 +33,10 @@ jobs:
 
       - name: Test
         run: dotnet test Ledgerpay.sln -c Release --no-build --logger trx
+
+      - name: Test frontend
+        working-directory: services/frontend
+        run: go test ./...
 
       - name: Docker compose build
         run: docker compose -f infra/docker-compose.yml build
