@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/static/styles.css">
     <script defer src="/static/app.js"></script>
 </head>
-<body>
+<body data-page="home">
     <div class="intro-splash" id="intro-splash" aria-hidden="true">
         <div class="intro-splash__halo"></div>
         <div class="intro-splash__content">
@@ -38,12 +38,12 @@
             </a>
 
             <nav class="topnav">
-                <a href="#novo-pagamento">Pagar</a>
-                <a href="#acompanhar">Acompanhar</a>
-                <a href="#estorno">Estorno</a>
+                <a href="/#novo-pagamento">Pagar</a>
+                <a href="/#acompanhar">Acompanhar</a>
+                <a href="/#estorno">Estorno</a>
+                <a href="/extrato">Extrato</a>
             </nav>
 
-            <span class="trust-badge">Ambiente protegido</span>
         </header>
 
         <main class="content">
@@ -60,37 +60,17 @@
                         <a class="btn btn-primary" href="#novo-pagamento">Fazer pagamento</a>
                         <a class="btn btn-secondary" href="#acompanhar">Consultar transacao</a>
                     </div>
+
+                    <div class="hero-note">
+                        <span class="card-kicker">Padrao de mercado</span>
+                        <h2>Experiencia inspirada em bancos tradicionais</h2>
+                        <ul class="hero-list">
+                            <li>Branco predominante para leitura rapida.</li>
+                            <li>Verde institucional para acoes e status.</li>
+                            <li>Dourado em destaques e elementos de confianca.</li>
+                        </ul>
+                    </div>
                 </div>
-
-                <aside class="hero-card">
-                    <span class="card-kicker">Padrao de mercado</span>
-                    <h2>Experiencia inspirada em bancos tradicionais</h2>
-                    <ul class="hero-list">
-                        <li>Branco predominante para leitura rapida.</li>
-                        <li>Verde institucional para acoes e status.</li>
-                        <li>Dourado em destaques e elementos de confianca.</li>
-                    </ul>
-                </aside>
-            </section>
-
-            <section class="feature-strip">
-                <article class="feature-card">
-                    <span class="feature-chip">Chave unica</span>
-                    <strong>Validacao antes do envio</strong>
-                    <p>A chave da operacao precisa seguir formato valido e nao pode ser reaproveitada na mesma sessao do navegador.</p>
-                </article>
-
-                <article class="feature-card">
-                    <span class="feature-chip">Acompanhamento</span>
-                    <strong>Status da transacao</strong>
-                    <p>Consulte o andamento do pagamento e veja se ele foi aprovado, postado ou estornado.</p>
-                </article>
-
-                <article class="feature-card">
-                    <span class="feature-chip">Comprovante</span>
-                    <strong>Retorno mais humano</strong>
-                    <p>O retorno da operacao aparece como comprovante amigavel, sem linguagem tecnica desnecessaria.</p>
-                </article>
             </section>
 
             <section class="workspace">
@@ -174,36 +154,7 @@
                     </div>
                 </article>
 
-                <article class="panel panel-wide">
-                    <div class="panel-header">
-                        <div>
-                            <span class="panel-kicker">Extrato da transacao</span>
-                            <h2>Movimentacoes vinculadas ao pagamento</h2>
-                        </div>
-                        <button class="btn btn-secondary" id="refresh-ledger" type="button">Atualizar extrato</button>
-                    </div>
-
-                    <div class="table-shell">
-                        <table class="ledger-table">
-                            <thead>
-                                <tr>
-                                    <th>Data</th>
-                                    <th>Descricao</th>
-                                    <th>Conta</th>
-                                    <th>Natureza</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody id="ledger-rows">
-                                <tr>
-                                    <td colspan="5" class="table-empty">Nenhuma movimentacao disponivel para exibir.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </article>
-
-                <article class="panel" id="estorno">
+                <article class="panel panel-wide" id="estorno">
                     <div class="panel-header">
                         <div>
                             <span class="panel-kicker">Estorno</span>

@@ -105,6 +105,41 @@ func TestHomePageRenders(t *testing.T) {
 	}
 }
 
+func TestStatementPageRenders(t *testing.T) {
+	app, err := newServer(config{
+		ListenAddr:        ":8080",
+		PaymentsAPIURL:    "http://localhost:8081",
+		LedgerAPIURL:      "http://localhost:8082",
+		PaymentsPublicURL: "http://localhost:8081",
+		LedgerPublicURL:   "http://localhost:8082",
+		GrafanaURL:        "http://localhost:3000",
+		RabbitMQURL:       "http://localhost:15672",
+		JaegerURL:         "http://localhost:16686",
+		JWTIssuer:         "ledgerpay.local",
+		JWTAudience:       "ledgerpay.api",
+		JWTSigningKey:     "test-secret",
+		JWTSubject:        "frontend-user",
+		TokenTTL:          time.Hour,
+		RequestTimeout:    time.Second,
+	}, slog.New(slog.NewTextHandler(io.Discard, nil)))
+	if err != nil {
+		t.Fatalf("new server: %v", err)
+	}
+
+	request := httptest.NewRequest(http.MethodGet, "/extrato", nil)
+	recorder := httptest.NewRecorder()
+
+	app.routes().ServeHTTP(recorder, request)
+
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("unexpected status code: %d", recorder.Code)
+	}
+
+	if !strings.Contains(recorder.Body.String(), "Extrato LinkPay") {
+		t.Fatalf("statement page did not render expected title")
+	}
+}
+
 func TestValidateOperationKey(t *testing.T) {
 	tests := []struct {
 		name    string

@@ -1,4 +1,5 @@
 const USED_KEYS_STORAGE = "ledgerpay.used-operation-keys";
+const LAST_PAYMENT_STORAGE = "linkpay.last-selected-payment";
 const OPERATION_KEY_PATTERN = /^[A-Za-z0-9_-]{8,64}$/;
 
 const state = {
@@ -34,6 +35,7 @@ function boot() {
     setGeneratedOperationKey();
     renderKeyFeedback("A chave sera validada antes do envio.", false);
     wireEvents();
+    bootStatementPage();
 }
 
 function startIntroSplash() {
@@ -72,64 +74,82 @@ function startIntroSplash() {
 }
 
 function wireEvents() {
-    els.generateIdem.addEventListener("click", () => {
-        setGeneratedOperationKey();
-        renderKeyFeedback("Nova chave unica gerada para esta operacao.", false, true);
-    });
+    if (els.generateIdem) {
+        els.generateIdem.addEventListener("click", () => {
+            setGeneratedOperationKey();
+            renderKeyFeedback("Nova chave unica gerada para esta operacao.", false, true);
+        });
+    }
 
-    els.idempotencyKey.addEventListener("input", () => {
-        const validationMessage = validateOperationKeyInput(els.idempotencyKey.value);
-        if (validationMessage) {
-            renderKeyFeedback(validationMessage, true);
-            return;
-        }
-
-        if (els.idempotencyKey.value.trim()) {
-            renderKeyFeedback("Chave valida para uma nova operacao.", false, true);
-        }
-    });
-
-    els.refreshLedger.addEventListener("click", async () => {
-        toggleButton(els.refreshLedger, true, "Atualizando...");
-
-        try {
-            if (!state.selectedPaymentId) {
-                renderLedger([]);
-                renderReceipt({
-                    tone: "error",
-                    kicker: "Atenção",
-                    title: "Selecione uma transacao antes de atualizar o extrato",
-                    message: "Consulte um pagamento para carregar as movimentacoes desta operacao.",
-                    badge: "Pendente",
-                });
+    if (els.idempotencyKey) {
+        els.idempotencyKey.addEventListener("input", () => {
+            const validationMessage = validateOperationKeyInput(els.idempotencyKey.value);
+            if (validationMessage) {
+                renderKeyFeedback(validationMessage, true);
                 return;
             }
 
-            await loadLedger(state.selectedPaymentId);
-            renderReceipt({
-                tone: "success",
-                kicker: "Extrato atualizado",
-                title: "Movimentacoes atualizadas com sucesso",
-                message: "As movimentacoes mais recentes desta transacao ja estao visiveis na tela.",
-                badge: "Atualizado",
-                items: [
-                    { label: "Codigo da transacao", value: state.selectedPaymentId },
-                    { label: "Momento da consulta", value: formatDate(new Date().toISOString()) },
-                ],
-            });
-        } catch (error) {
-            renderError("Falha ao atualizar o extrato", error);
-        } finally {
-            toggleButton(els.refreshLedger, false, "Atualizar extrato");
-        }
-    });
+            if (els.idempotencyKey.value.trim()) {
+                renderKeyFeedback("Chave valida para uma nova operacao.", false, true);
+            }
+        });
+    }
 
-    els.createForm.addEventListener("submit", handleCreatePayment);
-    els.lookupForm.addEventListener("submit", handleLookupPayment);
-    els.reverseForm.addEventListener("submit", handleReversePayment);
+    if (els.refreshLedger) {
+        els.refreshLedger.addEventListener("click", async () => {
+            toggleButton(els.refreshLedger, true, "Atualizando...");
+
+            try {
+                if (!state.selectedPaymentId) {
+                    renderLedger([]);
+                    renderReceipt({
+                        tone: "error",
+                        kicker: "Atenção",
+                        title: "Selecione uma transacao antes de atualizar o extrato",
+                        message: "Consulte um pagamento para carregar as movimentacoes desta operacao.",
+                        badge: "Pendente",
+                    });
+                    return;
+                }
+
+                await loadLedger(state.selectedPaymentId);
+                renderReceipt({
+                    tone: "success",
+                    kicker: "Extrato atualizado",
+                    title: "Movimentacoes atualizadas com sucesso",
+                    message: "As movimentacoes mais recentes desta transacao ja estao visiveis na tela.",
+                    badge: "Atualizado",
+                    items: [
+                        { label: "Codigo da transacao", value: state.selectedPaymentId },
+                        { label: "Momento da consulta", value: formatDate(new Date().toISOString()) },
+                    ],
+                });
+            } catch (error) {
+                renderError("Falha ao atualizar o extrato", error);
+            } finally {
+                toggleButton(els.refreshLedger, false, "Atualizar extrato");
+            }
+        });
+    }
+
+    if (els.createForm) {
+        els.createForm.addEventListener("submit", handleCreatePayment);
+    }
+
+    if (els.lookupForm) {
+        els.lookupForm.addEventListener("submit", handleLookupPayment);
+    }
+
+    if (els.reverseForm) {
+        els.reverseForm.addEventListener("submit", handleReversePayment);
+    }
 }
 
 function setGeneratedOperationKey() {
+    if (!els.idempotencyKey) {
+        return;
+    }
+
     let nextKey = "";
 
     do {
@@ -311,12 +331,24 @@ async function loadLedger(paymentId) {
 
 function syncSelectedPayment(payment) {
     state.selectedPaymentId = payment.id;
-    els.lookupPaymentId.value = payment.id;
-    els.reversePaymentId.value = payment.id;
+    persistLastSelectedPayment(payment.id);
+
+    if (els.lookupPaymentId) {
+        els.lookupPaymentId.value = payment.id;
+    }
+
+    if (els.reversePaymentId) {
+        els.reversePaymentId.value = payment.id;
+    }
+
     renderPaymentSummary(payment);
 }
 
 function renderPaymentSummary(payment) {
+    if (!els.paymentSummary) {
+        return;
+    }
+
     const lastReason = payment.lastReason?.trim()
         ? payment.lastReason
         : "Sem observacoes adicionais para esta transacao.";
@@ -360,6 +392,10 @@ function renderPaymentSummary(payment) {
 }
 
 function renderLedger(entries) {
+    if (!els.ledgerRows) {
+        return;
+    }
+
     if (!Array.isArray(entries) || entries.length === 0) {
         els.ledgerRows.innerHTML = `
             <tr>
@@ -386,6 +422,10 @@ function renderLedger(entries) {
 }
 
 function renderReceipt(model) {
+    if (!els.receiptCard) {
+        return;
+    }
+
     const items = Array.isArray(model.items) ? model.items : [];
     const receiptTone = model.tone === "error" ? "receipt-card is-error" : "receipt-card";
     const receiptStatusClass = model.tone === "error" ? "receipt-status" : `receipt-status ${statusClassName(model.badge)}`;
@@ -462,6 +502,10 @@ function toggleButton(button, loading, label) {
 }
 
 function renderKeyFeedback(message, isError, isValid = false) {
+    if (!els.keyFeedback) {
+        return;
+    }
+
     els.keyFeedback.textContent = message;
     els.keyFeedback.className = "field-feedback";
 
@@ -512,6 +556,60 @@ function persistUsedOperationKeys() {
         localStorage.setItem(USED_KEYS_STORAGE, JSON.stringify(state.usedOperationKeys));
     } catch {
         // Ignore storage failures and keep the validation fallback on the server side.
+    }
+}
+
+function bootStatementPage() {
+    if (document.body.dataset.page !== "statement") {
+        return;
+    }
+
+    const lastSelectedPayment = loadLastSelectedPayment();
+    if (!lastSelectedPayment) {
+        return;
+    }
+
+    state.selectedPaymentId = lastSelectedPayment;
+    if (els.lookupPaymentId) {
+        els.lookupPaymentId.value = lastSelectedPayment;
+    }
+
+    lookupPaymentById(lastSelectedPayment).then(() => {
+        renderReceipt({
+            tone: "success",
+            kicker: "Extrato pronto",
+            title: "Ultima transacao carregada automaticamente",
+            message: "A pagina abriu com a ultima transacao consultada para agilizar sua consulta.",
+            badge: "Atualizado",
+            items: [
+                { label: "Codigo da transacao", value: lastSelectedPayment },
+                { label: "Momento", value: formatDate(new Date().toISOString()) },
+            ],
+        });
+    }).catch(() => {
+        renderReceipt({
+            tone: "error",
+            kicker: "Extrato indisponivel",
+            title: "Nao foi possivel carregar a ultima transacao automaticamente",
+            message: "Informe o codigo da transacao para consultar o extrato manualmente.",
+            badge: "Erro",
+        });
+    });
+}
+
+function persistLastSelectedPayment(paymentId) {
+    try {
+        localStorage.setItem(LAST_PAYMENT_STORAGE, paymentId);
+    } catch {
+        // Ignore storage failures; the page still works with manual lookup.
+    }
+}
+
+function loadLastSelectedPayment() {
+    try {
+        return localStorage.getItem(LAST_PAYMENT_STORAGE) || "";
+    } catch {
+        return "";
     }
 }
 

@@ -24,7 +24,7 @@ import (
 )
 
 var (
-	//go:embed web/templates/index.html
+	//go:embed web/templates/*.html
 	templateFS embed.FS
 
 	//go:embed web/static/*
@@ -57,6 +57,7 @@ type pageData struct {
 	RabbitMQURL        string
 	JaegerURL          string
 	CurrentYear        int
+	PageTitle          string
 }
 
 type server struct {
@@ -127,7 +128,7 @@ func newServer(cfg config, logger *slog.Logger) (*server, error) {
 		logger = slog.New(slog.NewTextHandler(io.Discard, nil))
 	}
 
-	tmpl, err := template.ParseFS(templateFS, "web/templates/index.html")
+	tmpl, err := template.ParseFS(templateFS, "web/templates/*.html")
 	if err != nil {
 		return nil, fmt.Errorf("parse template: %w", err)
 	}
@@ -150,6 +151,7 @@ func (s *server) routes() http.Handler {
 	mux := http.NewServeMux()
 	mux.Handle("/static/", s.static)
 	mux.HandleFunc("/", s.handleHome)
+	mux.HandleFunc("/extrato", s.handleStatementPage)
 	mux.HandleFunc("/health", s.handleFrontendHealth)
 	mux.HandleFunc("/api/overview/health", s.handleOverviewHealth)
 	mux.HandleFunc("/api/reconciliation", s.handleReconciliation)
@@ -177,11 +179,40 @@ func (s *server) handleHome(w http.ResponseWriter, r *http.Request) {
 		RabbitMQURL:        s.cfg.RabbitMQURL,
 		JaegerURL:          s.cfg.JaegerURL,
 		CurrentYear:        time.Now().Year(),
+		PageTitle:          "LinkPay Banco Digital",
 	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	if err := s.template.Execute(w, data); err != nil {
+	if err := s.template.ExecuteTemplate(w, "index.html", data); err != nil {
 		s.logger.Error("render home page", "error", err)
+		http.Error(w, "Nao foi possivel renderizar a interface.", http.StatusInternalServerError)
+	}
+}
+
+func (s *server) handleStatementPage(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/extrato" {
+		http.NotFound(w, r)
+		return
+	}
+
+	if r.Method != http.MethodGet {
+		s.methodNotAllowed(w, http.MethodGet)
+		return
+	}
+
+	data := pageData{
+		PaymentsSwaggerURL: joinURL(s.cfg.PaymentsPublicURL, "/swagger"),
+		LedgerSwaggerURL:   joinURL(s.cfg.LedgerPublicURL, "/swagger"),
+		GrafanaURL:         s.cfg.GrafanaURL,
+		RabbitMQURL:        s.cfg.RabbitMQURL,
+		JaegerURL:          s.cfg.JaegerURL,
+		CurrentYear:        time.Now().Year(),
+		PageTitle:          "LinkPay Extrato",
+	}
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	if err := s.template.ExecuteTemplate(w, "extrato.html", data); err != nil {
+		s.logger.Error("render statement page", "error", err)
 		http.Error(w, "Nao foi possivel renderizar a interface.", http.StatusInternalServerError)
 	}
 }
