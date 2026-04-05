@@ -50,24 +50,24 @@
             <section class="hero">
                 <div class="hero-copy">
                     <span class="eyebrow">LinkPay Banco Digital</span>
-                    <h1>Pagamentos com visual bancario, simples e seguro.</h1>
+                    <h1>Pagamentos seguros e com total transparência.</h1>
                     <p>
-                        Uma interface focada no usuario final para enviar pagamentos,
-                        acompanhar o andamento da transacao e solicitar estorno com mais clareza.
+                        Plataforma de pagamentos inteligente com acompanhamento em tempo real,
+                        segurança bancária e permite reverter operações com facilidade.
                     </p>
 
                     <div class="hero-actions">
-                        <a class="btn btn-primary" href="#novo-pagamento">Fazer pagamento</a>
-                        <a class="btn btn-secondary" href="#acompanhar">Consultar transacao</a>
+                        <a class="btn btn-primary" href="#novo-pagamento">Iniciar pagamento</a>
+                        <a class="btn btn-secondary" href="#acompanhar">Consultar extrato</a>
                     </div>
 
                     <div class="hero-note">
-                        <span class="card-kicker">Padrao de mercado</span>
-                        <h2>Experiencia inspirada em bancos tradicionais</h2>
+                        <span class="card-kicker">Segurança bancária</span>
+                        <h2>Experiência profissional e confiável</h2>
                         <ul class="hero-list">
-                            <li>Branco predominante para leitura rapida.</li>
-                            <li>Verde institucional para acoes e status.</li>
-                            <li>Dourado em destaques e elementos de confianca.</li>
+                            <li>✓ Transações criptografadas de ponta a ponta</li>
+                            <li>✓ Monitoramento em tempo real com análise de risco</li>
+                            <li>✓ Reversão de pagamentos a qualquer momento</li>
                         </ul>
                     </div>
                 </div>
@@ -78,14 +78,14 @@
                     <div class="panel-header">
                         <div>
                             <span class="panel-kicker">Novo pagamento</span>
-                            <h2>Preencha os dados da operacao</h2>
+                            <h2>Criar uma transferência</h2>
                         </div>
                     </div>
 
                     <form class="form-grid" id="create-payment-form">
                         <label>
-                            <span>Valor</span>
-                            <input id="amount" name="amount" type="number" min="0.01" step="0.01" placeholder="100.50" required>
+                            <span>Valor a transferir</span>
+                            <input id="amount" name="amount" type="number" min="0.01" step="0.01" placeholder="R$ 0,00" required>
                         </label>
 
                         <label>
@@ -94,23 +94,23 @@
                         </label>
 
                         <label>
-                            <span>Identificacao do pagador</span>
+                            <span>Pagador (Conta de origem)</span>
                             <input id="payer-id" name="payerId" type="text" value="customer-001" required>
                         </label>
 
                         <label>
-                            <span>Identificacao do recebedor</span>
+                            <span>Recebedor (Conta de destino)</span>
                             <input id="merchant-id" name="merchantId" type="text" value="merchant-abc" required>
                         </label>
 
                         <label class="field-span-2">
-                            <span>Chave unica da operacao</span>
+                            <span>Chave de idempotência</span>
                             <div class="inline-field">
-                                <input id="idempotency-key" name="idempotencyKey" type="text" placeholder="ex.: pagamento_abril_001" required>
-                                <button class="btn btn-secondary btn-inline" id="generate-idem" type="button">Gerar nova</button>
+                                <input id="idempotency-key" name="idempotencyKey" type="text" placeholder="ex.: transferencia_001" required>
+                                <button class="btn btn-secondary btn-inline" id="generate-idem" type="button">Gerar</button>
                             </div>
-                            <small class="helper-text">Use apenas letras, numeros, hifen ou underscore, com 8 a 64 caracteres.</small>
-                            <small class="field-feedback" id="key-feedback">A chave sera validada antes do envio.</small>
+                            <small class="helper-text">Evita duplicação de transações. Use 8-64 caracteres alfanuméricos.</small>
+                            <small class="field-feedback" id="key-feedback">A chave será validada antes do envio.</small>
                         </label>
 
                         <button class="btn btn-primary" id="submit-payment" type="submit">Confirmar pagamento</button>
@@ -121,19 +121,19 @@
                     <div class="panel-header">
                         <div>
                             <span class="panel-kicker">Acompanhar</span>
-                            <h2>Consultar uma transacao</h2>
+                            <h2>Consultar situação de pagamento</h2>
                         </div>
                     </div>
 
                     <form class="lookup-form" id="lookup-payment-form">
-                        <input id="lookup-payment-id" name="paymentId" type="text" placeholder="Informe o codigo da transacao" required>
+                        <input id="lookup-payment-id" name="paymentId" type="text" placeholder="Código da transação" required>
                         <button class="btn btn-secondary" id="lookup-payment" type="submit">Consultar</button>
                     </form>
 
                     <div class="summary-card" id="payment-summary">
                         <div class="summary-empty">
-                            <strong>Nenhuma transacao selecionada</strong>
-                            <p>Quando voce consultar ou criar um pagamento, o resumo aparecera aqui.</p>
+                            <strong>Nenhuma transação carregada</strong>
+                            <p>Informe o código de uma transação anterior para ver seu status detalhado.</p>
                         </div>
                     </div>
                 </article>
@@ -142,14 +142,14 @@
                     <div class="panel-header">
                         <div>
                             <span class="panel-kicker">Comprovante</span>
-                            <h2>Ultima movimentacao</h2>
+                            <h2>Última operação confirmada</h2>
                         </div>
                     </div>
 
                     <div class="receipt-card" id="receipt-card">
                         <div class="receipt-empty">
-                            <strong>Aguardando sua primeira acao</strong>
-                            <p>Crie, consulte ou estorne um pagamento para visualizar o comprovante desta area.</p>
+                            <strong>Nenhuma operação registrada</strong>
+                            <p>Após criar ou consultar um pagamento, o comprovante será exibido nesta seção.</p>
                         </div>
                     </div>
                 </article>
@@ -157,31 +157,31 @@
                 <article class="panel panel-wide" id="estorno">
                     <div class="panel-header">
                         <div>
-                            <span class="panel-kicker">Estorno</span>
-                            <h2>Solicitar reversao de pagamento</h2>
+                            <span class="panel-kicker">Reverter pagamento</span>
+                            <h2>Solicitar devolução de transferência</h2>
                         </div>
                     </div>
 
                     <form class="form-grid" id="reverse-payment-form">
                         <label class="field-span-2">
-                            <span>Codigo da transacao</span>
-                            <input id="reverse-payment-id" name="paymentId" type="text" placeholder="Use o codigo da transacao consultada" required>
+                            <span>Código da transação a reverter</span>
+                            <input id="reverse-payment-id" name="paymentId" type="text" placeholder="Informe o código da transferência" required>
                         </label>
 
                         <label class="field-span-2">
-                            <span>Motivo do estorno</span>
-                            <textarea id="reverse-reason" name="reason" rows="4" placeholder="Descreva o motivo do pedido" required></textarea>
+                            <span>Motivo da devolução</span>
+                            <textarea id="reverse-reason" name="reason" rows="3" placeholder="Explique o motivo da reversão solicitada..." required></textarea>
                         </label>
 
-                        <button class="btn btn-primary" id="submit-reversal" type="submit">Solicitar estorno</button>
+                        <button class="btn btn-primary" id="submit-reversal" type="submit">Solicitar reversão</button>
                     </form>
                 </article>
             </section>
         </main>
 
         <footer class="footer">
-            <span>LinkPay Banco Digital</span>
-            <span>&copy; {{.CurrentYear}} experiencia financeira com foco no usuario.</span>
+            <span>LinkPay — Banco Digital</span>
+            <span>&copy; {{.CurrentYear}} Plataforma de pagamentos segura e confiável</span>
         </footer>
     </div>
 </body>

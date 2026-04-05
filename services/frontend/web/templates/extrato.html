@@ -48,20 +48,20 @@
         <main class="content">
             <section class="hero">
                 <div class="hero-copy">
-                    <span class="eyebrow">Extrato LinkPay</span>
-                    <h1>Consulte as movimentacoes da sua transacao.</h1>
+                    <span class="eyebrow">Extrato de transações</span>
+                    <h1>Consulte o histórico completo.</h1>
                     <p>
-                        Informe o codigo da transacao para ver os lancamentos vinculados ao pagamento,
-                        acompanhar a operacao e atualizar o extrato sempre que precisar.
+                        Acesse o extrato detalhado de suas transferências, acompanhe cada movimento
+                        da transação e tenha total rastreabilidade de suas operações.
                     </p>
 
                     <div class="hero-note">
-                        <span class="card-kicker">Consulta dedicada</span>
-                        <h2>Um espaco so para o extrato</h2>
+                        <span class="card-kicker">Rastreabilidade total</span>
+                        <h2>Consulta transparente do extrato</h2>
                         <ul class="hero-list">
-                            <li>Consulta direta por codigo da transacao.</li>
-                            <li>Resumo da operacao com status atual.</li>
-                            <li>Atualizacao manual do extrato quando necessario.</li>
+                            <li>✓ Busca direta por código da transação</li>
+                            <li>✓ Histórico completo de movimentações</li>
+                            <li>✓ Atualização em tempo real do status</li>
                         </ul>
                     </div>
                 </div>
@@ -72,28 +72,28 @@
                     <div class="panel-header">
                         <div>
                             <span class="panel-kicker">Buscar extrato</span>
-                            <h2>Informe o codigo da transacao</h2>
+                            <h2>Consulte sua transação</h2>
                         </div>
                     </div>
 
                     <form class="lookup-form statement-search" id="lookup-payment-form">
-                        <input id="lookup-payment-id" name="paymentId" type="text" placeholder="Informe o codigo da transacao" required>
-                        <button class="btn btn-primary" id="lookup-payment" type="submit">Consultar extrato</button>
+                        <input id="lookup-payment-id" name="paymentId" type="text" placeholder="Código da transação" required>
+                        <button class="btn btn-primary" id="lookup-payment" type="submit">Buscar extrato</button>
                     </form>
                 </article>
 
                 <article class="panel" id="acompanhar">
                     <div class="panel-header">
                         <div>
-                            <span class="panel-kicker">Resumo da transacao</span>
-                            <h2>Dados da operacao</h2>
+                            <span class="panel-kicker">Detalhes da transferência</span>
+                            <h2>Informações da operação</h2>
                         </div>
                     </div>
 
                     <div class="summary-card" id="payment-summary">
                         <div class="summary-empty">
-                            <strong>Nenhuma transacao selecionada</strong>
-                            <p>Busque uma transacao para carregar o resumo e o extrato desta pagina.</p>
+                            <strong>Nenhuma transação localizada</strong>
+                            <p>Busque uma transação para ver seus detalhes completos.</p>
                         </div>
                     </div>
                 </article>
@@ -102,14 +102,14 @@
                     <div class="panel-header">
                         <div>
                             <span class="panel-kicker">Comprovante</span>
-                            <h2>Ultima atualizacao</h2>
+                            <h2>Último comprovante</h2>
                         </div>
                     </div>
 
                     <div class="receipt-card" id="receipt-card">
                         <div class="receipt-empty">
-                            <strong>Aguardando consulta</strong>
-                            <p>Quando voce buscar uma transacao, o retorno mais recente aparecera aqui.</p>
+                            <strong>Nenhum comprovante disponível</strong>
+                            <p>O comprovante será exibido aqui quando você consultar uma transação.</p>
                         </div>
                     </div>
                 </article>
@@ -117,26 +117,26 @@
                 <article class="panel panel-wide">
                     <div class="panel-header">
                         <div>
-                            <span class="panel-kicker">Extrato da transacao</span>
-                            <h2>Movimentacoes vinculadas ao pagamento</h2>
+                            <span class="panel-kicker">Histórico de movimentações</span>
+                            <h2>Todas as mudanças de status</h2>
                         </div>
-                        <button class="btn btn-secondary" id="refresh-ledger" type="button">Atualizar extrato</button>
+                        <button class="btn btn-secondary" id="refresh-ledger" type="button">Atualizar</button>
                     </div>
 
                     <div class="table-shell">
                         <table class="ledger-table">
                             <thead>
                                 <tr>
-                                    <th>Data</th>
-                                    <th>Descricao</th>
-                                    <th>Conta</th>
-                                    <th>Natureza</th>
+                                    <th>Período</th>
+                                    <th>Tipo de operação</th>
+                                    <th>Conta afetada</th>
+                                    <th>Classificação</th>
                                     <th>Valor</th>
                                 </tr>
                             </thead>
                             <tbody id="ledger-rows">
                                 <tr>
-                                    <td colspan="5" class="table-empty">Nenhuma movimentacao disponivel para exibir.</td>
+                                    <td colspan="5" class="table-empty">Nenhuma movimentação registrada ainda.</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -146,8 +146,8 @@
         </main>
 
         <footer class="footer">
-            <span>LinkPay Banco Digital</span>
-            <span>&copy; {{.CurrentYear}} experiencia financeira com foco no usuario.</span>
+            <span>LinkPay — Banco Digital</span>
+            <span>&copy; {{.CurrentYear}} Extrato completo e verificável de suas operações</span>
         </footer>
     </div>
 </body>
