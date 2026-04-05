@@ -1,8 +1,8 @@
-# Ledgerpay
+# LinkPay
 
 ![alt text](image.png)
 
-`Ledgerpay` e uma plataforma de transacoes de exemplo, desenhada para simular um pipeline de pagamentos no estilo bancario com lancamentos contabeis, padroes de resiliencia e observabilidade completa.
+`LinkPay` e uma plataforma de transacoes de exemplo, desenhada para simular um pipeline de pagamentos no estilo bancario com lancamentos contabeis, padroes de resiliencia e observabilidade completa.
 
 ## Problema e Contexto
 
@@ -84,7 +84,7 @@ Stack incluido no Docker Compose:
 
 URLs uteis apos subir o ambiente:
 
-- Frontend Ledgerpay: `http://localhost:8080`
+- Frontend LinkPay: `http://localhost:8080`
 - Swagger Payments: `http://localhost:8081/swagger`
 - Swagger Ledger: `http://localhost:8082/swagger`
 - RabbitMQ UI: `http://localhost:15672` (`guest/guest`)
@@ -122,9 +122,9 @@ Scopes:
 
 Valores locais padrao (appsettings):
 
-- issuer: `ledgerpay.local`
-- audience: `ledgerpay.api`
-- signing key: `ledgerpay-super-secret-signing-key-change-me`
+- issuer: `LinkPay.local`
+- audience: `LinkPay.api`
+- signing key: `LinkPay-super-secret-signing-key-change-me`
 
 Exemplo de payload do token: `docs/api-contracts/jwt-example.md`
 
@@ -179,7 +179,7 @@ curl http://localhost:8082/api/reconciliation \
 Para rodar os testes:
 
 ```bash
-dotnet test Ledgerpay.sln
+dotnet test LinkPay.sln
 cd services/frontend && go test ./...
 ```
 
@@ -197,7 +197,7 @@ Pipeline do GitHub Actions em `.github/workflows/ci.yml`:
 ## Estrutura do repositorio
 
 ```text
-ledgerpay/
+LinkPay/
   docs/
     architecture.md
     diagrams/
