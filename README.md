@@ -1,5 +1,7 @@
 # Ledgerpay
-.
+
+![alt text](image.png)
+
 `Ledgerpay` e uma plataforma de transacoes de exemplo, desenhada para simular um pipeline de pagamentos no estilo bancario com lancamentos contabeis, padroes de resiliencia e observabilidade completa.
 
 ## Problema e Contexto
@@ -7,6 +9,8 @@
 Sistemas transacionais financeiros exigem garantias fortes de consistencia, trilha de auditoria, seguranca em reprocessamento e visibilidade operacional. Este projeto demonstra um fluxo realista de pagamentos com APIs sincronas, coreografia assicrona por eventos e razao contabil com debito/credito.
 
 Fluxo principal:
+
+![alt text](image-1.png)
 
 1. O cliente cria uma `Payment Intent`.
 2. O `risk-worker` avalia e emite a decisao.
